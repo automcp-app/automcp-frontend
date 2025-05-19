@@ -64,6 +64,7 @@ export default function Home() {
               </Label>
               <div className="flex gap-2">
                 {isSubmitted ? (
+
                   <div className="flex-1 flex items-center px-3 rounded-md py-2 border border-zinc-200 border-b-zinc-300/80 border-2">
                     <p className="text-primary font-medium">Thanks for joining! We'll be in touch soon.</p>
                   </div>
