@@ -5,12 +5,38 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Github, Star } from "lucide-react"
-import { supabase } from '@/lib/supabase'
+import { Textarea } from "@/components/ui/textarea"
+import { Card, CardContent } from "@/components/ui/card"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Checkbox } from "@/components/ui/checkbox"
 
 export default function Home() {
-  const [email, setEmail] = useState('')
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    userTypes: [] as string[],
+    additionalDetails: ''
+  })
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [error, setError] = useState('')
+  const [isOpen, setIsOpen] = useState(false)
+
+  const userTypes = [
+    {
+      id: "api_provider",
+      label: "API Provider looking to host my APIs as MCP tools"
+    },
+    {
+      id: "llm_developer",
+      label: "LLM Developer looking to connect to external APIs"
+    }
+  ]
 
   useEffect(() => {
     const savedState = localStorage.getItem('waitlistSubmitted')
@@ -19,24 +45,51 @@ export default function Home() {
     }
   }, [])
 
+  const handleUserTypeChange = (checked: boolean, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      userTypes: checked
+        ? [...prev.userTypes, value]
+        : prev.userTypes.filter(type => type !== value)
+    }))
+  }
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     setError('')
 
-    try {
-      const { error } = await supabase
-        .from('emails')
-        .insert([{ email }])
+    if (formData.userTypes.length === 0) {
+      setError('Please select at least one option for how you will use AutoMCP')
+      return
+    }
 
-      if (error) throw error
+    try {
+      const response = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to join waitlist')
+      }
 
       setIsSubmitted(true)
+      setIsOpen(false)
       localStorage.setItem('waitlistSubmitted', 'true')
-      setEmail('')
+      setFormData({
+        name: '',
+        email: '',
+        userTypes: [],
+        additionalDetails: ''
+      })
     } catch (err) {
-      console.error('Error saving email:', err)
-      setError('Failed to join waitlist. Please try again.')
-      setIsSubmitted(false)
+      console.error('Error saving data:', err)
+      setError(err instanceof Error ? err.message : 'Failed to join waitlist. Please try again.')
     }
   }
 
@@ -45,7 +98,6 @@ export default function Home() {
       <div className="w-full max-w-3xl space-y-12 md:space-y-16 pt-20 md:pt-32 mb-12">
         <div className="space-y-6 text-center">
           <div className="space-y-2">
-            {/* <span className="px-3 py-1 text-sm font-medium bg-primary/10 text-primary rounded-full">Coming Soon</span> */}
           <h1 className="text-4xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/80 animate-gradient-x sm:text-5xl md:text-6xl pb-2">
             Let your AI use any API
           </h1>
@@ -55,72 +107,107 @@ export default function Home() {
           </p>
         </div>
 
-
-        <div className="space-y-6">
-          <form onSubmit={handleSubmit} className="max-w-md mx-auto space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">
-                {isSubmitted ? "You're on the waitlist!" : "Join the waitlist"}
-              </Label>
-              <div className="flex gap-2">
-                {isSubmitted ? (
-
-                  <div className="flex-1 flex items-center px-3 rounded-md py-2 border border-zinc-200 border-b-zinc-300/80 border-2">
-                    <p className="text-primary font-medium">Thanks for joining! We'll be in touch soon.</p>
+        <div className="space-y-6 flex justify-center">
+          {isSubmitted ? (
+            <Card className="max-w-md">
+              <CardContent className="pt-6">
+                <p className="text-primary font-medium text-center">Thanks for joining! We'll be in touch soon.</p>
+              </CardContent>
+            </Card>
+          ) : (
+            <Dialog open={isOpen} onOpenChange={setIsOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  size="lg"
+                  className="text-lg px-8 py-6 rounded-xl"
+                >
+                  Join Waitlist
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle></DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="flex flex-col">
+                    <Label htmlFor="name">Name</Label>
+                    <input
+                      className="border border-zinc-300 shadow-sm rounded-sm text-sm px-2 py-1  mt-2 border-b-zinc-400/60 focus:outline-none focus:ring-1 focus:ring-zinc-400 shadow-sm"
+                      id="name"
+                      placeholder="Enter your name"
+                      value={formData.name}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                        setFormData(prev => ({ ...prev, name: e.target.value }))}
+                      required
+                    />
                   </div>
-                ) : (
-                  <>
-                    <Input
+
+                  <div className="flex flex-col">
+                    <Label htmlFor="email">Email</Label>
+                    <input
+                    className="border border-zinc-300 shadow-sm rounded-sm text-sm px-2 py-1  mt-2 border-b-zinc-400/60 focus:outline-none focus:ring-1 focus:ring-zinc-400 shadow-sm"
                       id="email"
                       type="email"
                       placeholder="Enter your email"
-                      value={email}
-                      onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                      value={formData.email}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                        setFormData(prev => ({ ...prev, email: e.target.value }))}
                       required
                     />
-                    <Button type="submit">Join</Button>
-                  </>
-                )}
-              </div>
-              {error && (
-                <p className="text-sm text-destructive mt-1">{error}</p>
-              )}
-            </div>
-          </form>
+                  </div>
+
+
+                  <div className="">
+                    <Label>I am an...</Label>
+                    <div className="grid gap-4 mt-2">
+                      {userTypes.map((type) => (
+                        <div key={type.id} className="flex items-center space-x-2">
+                          <Checkbox
+                            className=" z focus:outline-none focus:ring-1 focus:ring-zinc-400"
+                            id={type.id}
+                            checked={formData.userTypes.includes(type.id)}
+                            onCheckedChange={(checked) =>
+                              handleUserTypeChange(checked as boolean, type.id)}
+                          />
+                          <Label
+                            htmlFor={type.id}
+                            className="font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                          >
+                            {type.label}
+                          </Label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col">
+                    <Label htmlFor="additionalDetails">Additional Details (Optional)</Label>
+                    <textarea
+                                        className="border border-zinc-300 shadow-sm rounded-sm text-sm px-2 py-1  mt-2 focus:outline-none focus:ring-1 focus:ring-zinc-400 border-b-zinc-400/60 shadow-sm pb-[2em]"
+
+                      id="additionalDetails"
+                      placeholder="Tell us more about your use case, company, or requirements"
+                      value={formData.additionalDetails}
+                      onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+                        setFormData(prev => ({ ...prev, additionalDetails: e.target.value }))}
+                    />
+                  </div>
+
+                  {error && (
+                    <p className="text-sm text-destructive">{error}</p>
+                  )}
+
+                  <Button type="submit" className=" w-full">
+                    Submit
+                  </Button>
+                </form>
+              </DialogContent>
+            </Dialog>
+          )}
         </div>
-
-
-        <div className="space-y-6">
-          <div className="mx-auto max-w-2xl overflow-hidden rounded-xl bg-black/95 p-6 shadow-2xl transition-all duration-300 ">
-            <div className="relative">
-              <pre className="overflow-x-auto text-left opacity-40">
-                <code className="text-sm text-white font-mono">
-                  <span className="text-indigo-400 select-none mr-2">$</span>pip install <span className="blur-sm select-none">hello</span>
-                  <br />
-                  <span className="text-indigo-400 select-none mr-2">$</span><span className="blur-sm select-none">hello</span> run --url https://api.example.com/docs
-                </code>
-              </pre>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-sm font-medium text-white bg-black/80 px-4 py-1 rounded-full">Coming Soon</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* <div className="space-y-6 text-center">
-          <a
-            href="https://github.com/alexhamidi/automcp"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-8 py-3 text-sm font-medium text-white transition-all duration-300 bg-black rounded-full hover:bg-gray-800 hover:scale-105 hover:shadow-lg"
-          >
-            <Star className="w-5 h-5" />
-            View on GitHub
-          </a>
-        </div> */}
       </div>
 
-      <div className="border rounded-xl border-zinc-400 border-4 relative z-10 flex h-full flex-col items-center  text-center max-w-6xl mx-auto mb-12 shadow-2xl">
+      <div className="border rounded-xl border-zinc-400 border-4 relative z-10 flex h-full flex-col items-center text-center max-w-6xl mx-auto mb-12 shadow-2xl">
         <video
           playsInline
           muted
@@ -136,7 +223,7 @@ export default function Home() {
       </div>
 
       <footer className="w-full py-6 border-t border-border/40 sticky bottom-0 bg-background backdrop-blur-sm z-20">
-        <div className="container flex items-center justify-center ">
+        <div className="container flex items-center justify-center">
           <p className="text-sm text-muted-foreground">
             Built by the{' '}
             <a

@@ -45,3 +45,20 @@ next-env.d.ts
 # Logs
 logs
 *.log
+
+# Cache directories
+.cache/
+.npm/
+
+# OS generated files
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
