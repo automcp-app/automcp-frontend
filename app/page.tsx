@@ -98,23 +98,23 @@ export default function Home() {
       <div className="w-full max-w-3xl space-y-12 md:space-y-16 pt-20 md:pt-32 mb-12">
         <div className="space-y-6 text-center">
           <div className="space-y-2">
-          <h1 className="text-4xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/80 animate-gradient-x sm:text-5xl md:text-6xl pb-2">
-            Let your AI use any API
-          </h1>
+            <h1 className="text-4xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/80 animate-gradient-x sm:text-5xl md:text-6xl pb-2">
+              Let your AI use any API
+            </h1>
           </div>
           <p className="text-lg text-muted-foreground md:text-xl max-w-2xl mx-auto leading-relaxed">
             Enter the documentation urls you want to connect your AI Client to, and we'll spin up a container hosting all of the endpoints as MCP tools. Join our waitlist to get early access.
           </p>
         </div>
 
-        <div className=" flex justify-center gap-4">
+        <div className="flex justify-center gap-4">
           {isSubmitted ? (
-           <Button
-           size="lg"
-           className="text-lg px-8 py-6 rounded-xl border-black bg-white border-2 text-black cursor-not-allowed hover:bg-white"
-         >
-           You're on the waitlist!
-         </Button>
+            <Button
+              size="lg"
+              className="text-lg px-8 py-6 rounded-xl border-black bg-white border-2 text-black cursor-not-allowed hover:bg-white"
+            >
+              You're on the waitlist!
+            </Button>
           ) : (
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
               <DialogTrigger asChild>
@@ -146,7 +146,7 @@ export default function Home() {
                   <div className="flex flex-col">
                     <Label htmlFor="email">Email</Label>
                     <input
-                    className="border border-zinc-300 shadow-sm rounded-sm text-sm px-2 py-1  mt-2 border-b-zinc-400/60 focus:outline-none focus:ring-1 focus:ring-zinc-400 shadow-sm"
+                      className="border border-zinc-300 shadow-sm rounded-sm text-sm px-2 py-1  mt-2 border-b-zinc-400/60 focus:outline-none focus:ring-1 focus:ring-zinc-400 shadow-sm"
                       id="email"
                       type="email"
                       placeholder="Enter your email"
@@ -157,14 +157,13 @@ export default function Home() {
                     />
                   </div>
 
-
                   <div className="">
                     <Label>I am an...</Label>
                     <div className="grid gap-4 mt-2">
                       {userTypes.map((type) => (
                         <div key={type.id} className="flex items-center space-x-2">
                           <Checkbox
-                            className=" z focus:outline-none focus:ring-1 focus:ring-zinc-400"
+                            className="z focus:outline-none focus:ring-1 focus:ring-zinc-400"
                             id={type.id}
                             checked={formData.userTypes.includes(type.id)}
                             onCheckedChange={(checked) =>
@@ -184,12 +183,12 @@ export default function Home() {
                   <div className="flex flex-col">
                     <Label htmlFor="additionalDetails">Additional Details (Optional)</Label>
                     <textarea
-                                      className="border border-zinc-300 shadow-sm rounded-sm text-sm px-2 py-1  mt-2 focus:outline-none focus:ring-1 focus:ring-zinc-400 border-b-zinc-400/60 shadow-sm pb-[2em]"
-
+                      className="border border-zinc-300 shadow-sm rounded-sm text-sm px-2 py-1 mt-2 focus:outline-none focus:ring-1 focus:ring-zinc-400 border-b-zinc-400/60 shadow-sm pb-[2em]"
                       id="additionalDetails"
                       placeholder="Tell us more about your use case, company, or requirements"
                       value={formData.additionalDetails}
                       onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+
                         setFormData(prev => ({ ...prev, additionalDetails: e.target.value }))}
                     />
                   </div>
@@ -198,7 +197,7 @@ export default function Home() {
                     <p className="text-sm text-destructive">{error}</p>
                   )}
 
-                  <Button type="submit" className=" w-full">
+                  <Button type="submit" className="w-full">
                     Submit
                   </Button>
                 </form>
@@ -209,7 +208,9 @@ export default function Home() {
             size="lg"
             className="text-lg px-8 py-6 rounded-xl"
             variant="outline"
-            onClick={() => window.location.href = '/cli'}
+            onClick={() => {
+              window.open('https://github.com/alexhamidi/automcp', '_blank', 'noopener,noreferrer');
+            }}
           >
             View Docs
           </Button>
