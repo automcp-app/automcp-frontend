@@ -107,13 +107,14 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="space-y-6 flex justify-center">
+        <div className=" flex justify-center gap-4">
           {isSubmitted ? (
-            <Card className="max-w-md">
-              <CardContent className="pt-6">
-                <p className="text-primary font-medium text-center">Thanks for joining! We'll be in touch soon.</p>
-              </CardContent>
-            </Card>
+           <Button
+           size="lg"
+           className="text-lg px-8 py-6 rounded-xl border-black bg-white border-2 text-black cursor-not-allowed hover:bg-white"
+         >
+           You're on the waitlist!
+         </Button>
           ) : (
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
               <DialogTrigger asChild>
@@ -183,7 +184,7 @@ export default function Home() {
                   <div className="flex flex-col">
                     <Label htmlFor="additionalDetails">Additional Details (Optional)</Label>
                     <textarea
-                                        className="border border-zinc-300 shadow-sm rounded-sm text-sm px-2 py-1  mt-2 focus:outline-none focus:ring-1 focus:ring-zinc-400 border-b-zinc-400/60 shadow-sm pb-[2em]"
+                                      className="border border-zinc-300 shadow-sm rounded-sm text-sm px-2 py-1  mt-2 focus:outline-none focus:ring-1 focus:ring-zinc-400 border-b-zinc-400/60 shadow-sm pb-[2em]"
 
                       id="additionalDetails"
                       placeholder="Tell us more about your use case, company, or requirements"
@@ -204,6 +205,14 @@ export default function Home() {
               </DialogContent>
             </Dialog>
           )}
+          <Button
+            size="lg"
+            className="text-lg px-8 py-6 rounded-xl"
+            variant="outline"
+            onClick={() => window.location.href = '/cli'}
+          >
+            View Docs
+          </Button>
         </div>
       </div>
 
