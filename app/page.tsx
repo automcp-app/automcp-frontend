@@ -95,6 +95,7 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center px-4 bg-gradient-to-b from-background to-background/80 animate-gradient-y">
+      <div className="fixed top-0 w-full h-[2em] bg-purple-500 text-white text-center flex items-center justify-center"><span className="font-mono text-sm">OUR CLI BETA IS LIVE! SIGN UP FOR THE WAITLIST TO GET EARLY ACCESS</span></div>
       <div className="w-full max-w-3xl space-y-12 md:space-y-16 pt-20 md:pt-32 mb-12">
         <div className="space-y-6 text-center">
           <div className="space-y-2">
