@@ -100,11 +100,11 @@ export default function Home() {
         <div className="space-y-6 text-center">
           <div className="space-y-2">
             <h1 className="text-4xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/80 animate-gradient-x sm:text-5xl md:text-6xl pb-2">
-              Let your AI use any API
+              Your products. <br/>Now <span className="text-zinc-900">Agent-native.</span>
             </h1>
           </div>
           <p className="text-lg text-muted-foreground md:text-xl max-w-2xl mx-auto leading-relaxed">
-            Enter the documentation urls you want to connect your AI Client to, and we'll spin up a container hosting all of the endpoints as MCP tools. Join our waitlist to get early access.
+          Deploy secure, remote, and up-to-date MCP servers from existing services in seconds. Agents are your biggest untapped customers, don't get left behind.
           </p>
         </div>
 
