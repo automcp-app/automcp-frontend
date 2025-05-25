@@ -201,7 +201,7 @@ export default function Home() {
               </DialogContent>
             </Dialog>
           )}
-          {/* <Button
+           <Button
             size="lg"
             className="text-lg px-8 py-6 rounded-xl"
             variant="outline"
@@ -209,8 +209,8 @@ export default function Home() {
               window.open('https://github.com/alexhamidi/automcp', '_blank', 'noopener,noreferrer');
             }}
           >
-            View Docs
-          </Button> */}
+            View Code
+          </Button>
         </div>
       </div>
 
