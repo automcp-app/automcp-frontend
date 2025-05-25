@@ -58,10 +58,6 @@ export default function Home() {
     e.preventDefault()
     setError('')
 
-    if (formData.userTypes.length === 0) {
-      setError('Please select at least one option for how you will use AutoMCP')
-      return
-    }
 
     try {
       const response = await fetch('/api/waitlist', {

@@ -58,10 +58,6 @@ export default function Home() {
     e.preventDefault()
     setError('')
 
-    if (formData.userTypes.length === 0) {
-      setError('Please select at least one option for how you will use AutoMCP')
-      return
-    }
 
     try {
       const response = await fetch('/api/waitlist', {
@@ -96,15 +92,15 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center px-4 bg-gradient-to-b from-background to-background/80 animate-gradient-y">
       {/* <div className="fixed top-0 w-full h-[2em] bg-purple-500 text-white text-center flex items-center justify-center"><span className="font-mono text-sm">OUR CLI BETA IS LIVE! SIGN UP FOR THE WAITLIST TO GET EARLY ACCESS</span></div> */}
-      <div className="w-full max-w-3xl space-y-12 md:space-y-16 pt-20 md:pt-32 mb-12">
+      <div className="w-full max-w-10xl space-y-12 md:space-y-16 pt-20 md:pt-32 mb-12">
         <div className="space-y-6 text-center">
           <div className="space-y-2">
             <h1 className="text-4xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/80 animate-gradient-x sm:text-5xl md:text-6xl pb-2">
-              Your products. <br/>Now <span className="text-zinc-900">Agent-native.</span>
+              Make your service agent-ready in seconds
             </h1>
           </div>
-          <p className="text-lg text-muted-foreground md:text-xl max-w-2xl mx-auto leading-relaxed">
-          Deploy secure, remote, and up-to-date MCP servers from existing services in seconds. Agents are your biggest untapped customers, don't get left behind.
+          <p className="text-lg text-muted-foreground md:text-xl max-w-8xl mx-auto leading-relaxed">
+          Deploy secure, remote, and up-to-date MCP servers from existing services in seconds.<br/> Agents are your biggest untapped customers, don't get left behind.
           </p>
         </div>
 
